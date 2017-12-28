@@ -57,12 +57,17 @@ app.get('/warning/:app', function(req, res) {
             var select_sql = 'SELECT count FROM warnings WHERE app=' + client.escapeLiteral(req.params.app) + ';';
             client.query(select_sql, onSuccess(function(result) {
                 done();
-                res.status(200).json(result.rows[0]);
+                if(result.rowCount == 0) {
+                    res.status(404).send("ERR");
+                }
+                else {
+                    res.status(200).send("" + result.rows[0].count);
+                }
             }));
         }));
     }
     else {
-        res.status(400).json({});
+        res.status(401).send("FAIL");
     }
 });
 
@@ -72,12 +77,12 @@ app.post('/warning/:app', function(req, res) {
             var update_sql = 'UPDATE warnings SET count=' + client.escapeLiteral(req.body.count) + ' WHERE app=' + client.escapeLiteral(req.params.app) + ';';
             client.query(update_sql, onSuccess(function(result) {
                 done();
-                res.status(200).json(result.rows[0]);
+                res.status(200).send("OK");
             }));
         }));
     }
     else {
-        res.status(400).json({});
+        res.status(401).send("ERR");
     }
 })
 
