@@ -6,11 +6,11 @@
 #
 # always expect exit code 0 when succeed
 
-HEROKU_URL="https://your.herokuapp.com/"
+HEROKU_URL="${HEROKU_URL:=https://your.herokuapp.com}"
 
-SALT="abcde"
+SALT="${SALT:=abcdefghi}"
+APP="${APP:=com.example.app}"
 DATE="$(date +%s)"
-APP="com.example.app"
 SIGNATURE=$(echo -n "${SALT}${APP}${DATE}" | openssl dgst -sha256)
 
 if [ X"$1" = X"get" ]; then
